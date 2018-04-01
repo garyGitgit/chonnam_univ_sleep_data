@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+</head>
+
+<script>
+function submit()
+{
+  alert("submit")
+  $.ajax({
+    //TODO : 서버를 할당받으면 주소와 포트번호를 적어준다
+    url: "/store_data/",
+    data: {
+      'name1': $('#name1').val(),
+      'ex_data1': $('#ex_data1').val(),
+    },
+    method: "GET",
+    timeout: 5000,
+    success: function(data, textStatus, jqXHR) {
+      alert("성공!");
+    }
+  }).fail(function(data) {
+    alert("실패!");
+  });
+}
+</script>
+
+<body>
+
+<form >
+  Example Data<br>
+  <input type="text" size="50" id="name1" value="id1"> 
+  <input type="text" size="50" id="ex_data1" value="00017b_fffcd9_0000c7_ffcffd_fffec3_ffd007"> <br/>
+  <br><br>
+  
+</form> 
+<button type="submit" onclick="submit()">Submit</button>
+
+<p>If you click the "Submit" button, the form-data will be sent to a page called.</p>
+
+</body>
+</html>
+

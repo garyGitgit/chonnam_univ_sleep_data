@@ -1,0 +1,313 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang = "en">
+
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <script src="js/jscal2.js" type="text/javascript"></script>
+  <script src="js/lang/en.js" type="text/javascript"></script>
+  <link type="text/css" media="screen" rel="stylesheet" href="css/jscal2.css"/>
+  <link type="text/css" media="screen" rel="stylesheet" href="css/border-radius.css"/>
+  <link type="text/css" media="screen" rel="stylesheet" href="css/steel/steel.css"/>
+
+
+
+  <style type="text/css">
+
+
+    #prev,
+    #next {
+      display: inline-block;
+      text-decoration: none;
+      color: white;
+      padding: 2.5px;
+    }
+
+    div {
+      border: solid 1px;
+    }
+
+    div#wrapper {
+      width: 1000px;
+      height: 1000px;
+      background-color: white;
+      border: none;
+    }
+
+    div.profile {
+      width: 180px;
+      height: 200px;
+      margin-left: 8px;
+      margin-top: 8px;
+      float: left;
+      background-color: green;
+    }
+
+    div.info {
+      width: 200px;
+      height: 200px;
+      margin-left: 100px;
+      margin-top: 8px;
+      margin-right: 8px;
+      float: left;
+      background-color: blue;
+    }
+
+
+    div.graph {
+
+      float: left;
+    }
+  </style>
+</head>
+
+
+<body>
+  <div class="container">
+    <!-- tab1 -->
+    <ul class="nav nav-tabs">
+      <li class="active"><a data-toggle="pill" href="#menu1">실시간</a></li>
+      <li><a data-toggle="pill" href="#menu2">날짜별</a></li>
+    </ul>
+
+    <div class="tab-content">
+      <div id="menu1" class="tab-pane fade in active">
+        <h3>실시간 그래프</h3>
+        <p>그래프1</p>
+
+        <div id="wrapper">
+          <!-- 사용자 정보는 나중에 -->
+          <!-- <div class="profile">
+            <center>
+              <img src="profile.jpg" width="150" , height="170" vspace="15" alt="profile photo"></center>
+          </div> -->
+          <!-- <div class="info"> <br> &nbsp이름&nbsp&nbsp&nbsp&nbsp Jihwan <br><br><br> &nbsp나이&nbsp&nbsp&nbsp&nbsp 26 <br><br><br> &nbsp몸무게&nbsp&nbsp&nbspbox 30 <br>
+          </div> -->
+
+          <!-- 달력 UI -->
+              <table>
+                <tr>
+                    <td>
+                        <h4>Inline Calendar</h4>
+                        <div id="calcontainer"></div> <br /><br />
+                        <form name="cal_click">
+
+                          <input type="text" name="calinfo" id="calinfo" size="10">
+                          <input type="button" id="send" value="입력">
+                        
+                        </form>
+
+                        <script>
+                          var cal_click = document.cal_click;         // form 객체 지정
+                          var clicked_date = cal_click.calinfo;  // 클릭한 데이터 객체 지정
+                          var send_btn = document.cal_click.send;   // 제출 버튼 객체 지정
+
+                          send_btn.onclick = function() {
+                            alert(clicked_date.value + '를 입력하셨습니다.');
+
+                          };
+                        </script>
+
+                        <Script Language="JavaScript">
+                        
+                        Calendar.setup ({
+                            cont: 'calcontainer',
+                            showTime: true,
+                            onSelect: function() {
+                                var date = this.selection.get();
+                                date     = Calendar.intToDate(date);
+                                date     = Calendar.printDate(date,"%Y%m%d");
+                                    
+                                document.getElementById('calinfo').value = date;
+                            }
+                            })
+                        
+
+
+                        </Script>
+                    </td>
+                </tr>
+                </table>
+
+
+
+
+          <!-- 캘린더 스크립트 -->
+
+
+
+
+
+
+
+          <!-- 그래프 UI -->
+          <div id=graph>
+            <!-- 여기 아래부터가 그래프를 그리는 코드 -->
+            <canvas id="myChart"></canvas>
+            <script type="text/javascript">
+
+
+var ctx = document.getElementById('myChart').getContext('2d');
+var chart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: 'line',
+
+    // The data for our dataset
+data: {
+//labels: ["DATA_A", "DATA_B", "DATA_C", "DATA_D", "DATA_E", "DATA_F"],
+labels: [{% for d in data %} "{{forloop.counter}}" {% if forloop.counter < data|length %}, {% endif %}{% endfor %} ],
+datasets: [
+{% for i in "012345" %}
+{
+    label: {{forloop.counter0|stringformat:"i"}},
+    backgroundColor: get_random_color(),
+    borderColor: recent_color,
+    fill: false,
+    data: [
+      {% for d in data %}
+        {% if i == "0" %}
+          {{d.DATA_A}},
+        {% elif i == "1" %}
+          {{d.DATA_B}},
+        {% elif i == "2" %}
+          {{d.DATA_C}},
+        {% elif i == "3" %}
+          {{d.DATA_D}},
+        {% elif i == "4" %}
+          {{d.DATA_E}},
+        {% elif i == "5" %}
+          {{d.DATA_F}},
+        {% endif %}
+      {% endfor %}
+    ],
+    //data: [1, 2, 3, 4, 5, 6],
+                    },
+                    {% endfor %}
+                    ],
+            },
+
+        // Configuration options go here
+        options: {
+            scales: {
+                        xAxes: [{
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Time'
+                            }
+                        }],
+                        yAxes: [{
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Value'
+                            }
+                        }]
+                    }
+        }
+    });
+    var recent_color;
+    function get_random_color() {
+       var r = Math.floor(Math.random() * 255);
+       var g = Math.floor(Math.random() * 255);
+       var b = Math.floor(Math.random() * 255);
+       recent_color = "rgb(" + r + "," + g + "," + b + ")";
+       return recent_color;
+   }
+           </script>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+      <div id="menu2" class="tab-pane fade">
+        <h3>날짜별 그래프</h3>
+        <p>그래프2</p>
+        <div id=graph>
+          <!-- 여기 아래부터가 그래프를 그리는 코드 -->
+          <canvas id="myChart2"></canvas>
+          <script type="text/javascript">
+
+
+var ctx = document.getElementById('myChart2').getContext('2d');
+var chart = new Chart(ctx, {
+  // The type of chart we want to create
+  type: 'line',
+
+  // The data for our dataset
+data: {
+//labels: ["DATA_A", "DATA_B", "DATA_C", "DATA_D", "DATA_E", "DATA_F"],
+labels: [{% for d in data %} "{{forloop.counter}}" {% if forloop.counter < data|length %}, {% endif %}{% endfor %} ],
+datasets: [
+{% for i in "012345" %}
+{
+  label: {{forloop.counter0|stringformat:"i"}},
+  backgroundColor: get_random_color(),
+  borderColor: recent_color,
+  fill: false,
+  data: [
+    {% for d in data %}
+      {% if i == "0" %}
+        {{d.DATA_A}},
+      {% elif i == "1" %}
+        {{d.DATA_B}},
+      {% elif i == "2" %}
+        {{d.DATA_C}},
+      {% elif i == "3" %}
+        {{d.DATA_D}},
+      {% elif i == "4" %}
+        {{d.DATA_E}},
+      {% elif i == "5" %}
+        {{d.DATA_F}},
+      {% endif %}
+    {% endfor %}
+  ],
+  //data: [1, 2, 3, 4, 5, 6],
+                  },
+                  {% endfor %}
+                  ],
+          },
+
+      // Configuration options go here
+      options: {
+          scales: {
+                      xAxes: [{
+                          display: true,
+                          scaleLabel: {
+                              display: true,
+                              labelString: 'Time'
+                          }
+                      }],
+                      yAxes: [{
+                          display: true,
+                          scaleLabel: {
+                              display: true,
+                              labelString: 'Value'
+                          }
+                      }]
+                  }
+      }
+  });
+  var recent_color;
+  function get_random_color() {
+     var r = Math.floor(Math.random() * 255);
+     var g = Math.floor(Math.random() * 255);
+     var b = Math.floor(Math.random() * 255);
+     recent_color = "rgb(" + r + "," + g + "," + b + ")";
+     return recent_color;
+ }
+         </script>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
+

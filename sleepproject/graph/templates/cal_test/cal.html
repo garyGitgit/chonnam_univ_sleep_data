@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang = "en">
+<head>
+  <meta charset="UTF-8">
+  <title>JavaScript Calendar Demo</title>
+  <script src="js/jscal2.js" type="text/javascript"></script>
+  <script src="js/lang/en.js" type="text/javascript"></script>
+  <link type="text/css" media="screen" rel="stylesheet" href="css/jscal2.css"/>
+  <link type="text/css" media="screen" rel="stylesheet" href="css/border-radius.css"/>
+  <link type="text/css" media="screen" rel="stylesheet" href="css/steel/steel.css"/>
+</head>
+
+
+<body>
+
+<h1>Dynarch Calendar (JSCal2) Tutorial</h1>
+
+  <table>
+  <tr>
+      <td>
+          <h3>Inline Calendar</h3>
+          <div id="calcontainer"></div> <br /><br />
+          <form name="cal_click">
+
+            <input type="text" name="calinfo" id="calinfo" size="10">
+            <input type="button" id="send" value="입력">
+          
+          </form>
+
+          <script>
+            var cal_click = document.cal_click;         // form 객체 지정
+            var clicked_date = cal_click.calinfo;  // 클릭한 데이터 객체 지정
+            var send_btn = document.cal_click.send;   // 제출 버튼 객체 지정
+
+            send_btn.onclick = function() {
+              alert(clicked_date.value + '를 입력하셨습니다.');
+
+            };
+          </script>
+
+          <Script Language="JavaScript">
+          
+          Calendar.setup ({
+              cont: 'calcontainer',
+              showTime: true,
+              onSelect: function() {
+                  var date = this.selection.get();
+                  date     = Calendar.intToDate(date);
+                  date     = Calendar.printDate(date,"%Y%m%d");
+                      
+                  document.getElementById('calinfo').value = date;
+              }
+              })
+          
+
+
+          </Script>
+      </td>
+  </tr>
+  </table>
+
+</body>
+</html>

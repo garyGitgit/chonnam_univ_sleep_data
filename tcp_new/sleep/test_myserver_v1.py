@@ -1,5 +1,6 @@
 import socketserver
 import sqlite3
+import requests
 
 class MyTCPHandler(socketserver.BaseRequestHandler):
     """
@@ -11,10 +12,9 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
         starttime = 0
         # self.request is the TCP socket connected to the client
 
-
+        URL = "http://192.9.81.104:8000/show_new_graph/"
         data_count = 0
         while True:
-
             print("handling..........")
 
             data = self.request.recv(1024).strip()
@@ -50,6 +50,15 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                   print(insert_cmd)
                   conn.execute(insert_cmd)
                   print ("Records created successfully")
+
+                  # 100개마다 하나의 데이터를 Django 서버에 전송한다 
+                  if data%100 == 1:
+                     data_count = 0
+                     # 정수로 변환  
+                     requests.get(url = URL, params = {'real_time_data1' : int(n_data[2], 0), 'real_time_data2' : int(n_data[3], 0)}
+                 else :
+                     data_count = data_count + 1
+                  
               else:
                 str_data = result[0]
                 print("한 줄 데이터 : ", str_data)

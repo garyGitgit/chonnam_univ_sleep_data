@@ -74,19 +74,15 @@ real_time_ch2_buffer = deque()
 
 def set_data(request):
     real_time_ch1_buffer.append(int(request.GET['real_time_data1']))
-    print(request.GET['real_time_data1'])
     real_time_ch2_buffer.append(int(request.GET['real_time_data2']))
-    print(request.GET['real_time_data2'])
     return HttpResponse("ok")
 
 def get_data(request):
     response_data = {}
-    if real_time_ch1_buffer and real_time_ch2_buffer: 
-        response_data['new_data1'] = real_time_ch1_buffer.popleft()
-        response_data['new_data2'] = real_time_ch2_buffer.popleft()
+    if real_time_data_buffer : 
+        response_data['new_data'] = real_time_ch1_buffer.popleft()
     else :
-        response_data['new_data1'] = ""
-        response_data['new_data2'] = ""
+        response_data['new_data'] = ""
     response_data['result'] = 'error'
     response_data['message'] = 'Some error message'
     return HttpResponse(json.dumps(response_data), content_type="application/json")

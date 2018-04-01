@@ -24,7 +24,7 @@
             border: none;
         }
 
-        div {
+        div.container {
             border: solid 1px;
         }
 
@@ -73,6 +73,9 @@
             position: relative;
             height: 300px;
         }
+        #myChart{
+            border:solid 1px
+        }
 
     </style>
 
@@ -83,24 +86,27 @@
           type:"GET",
           url:"http://192.9.81.104:8000/get_data/",
           success: function(data) {
-          console.log(data["new_data"]);
-          if(data["new_data"] != ""){
-              adddata(parseInt(data["new_data"]));
+          if(data["new_data1"] != "" && data["new_data2"] != ""){
+              console.log(data["new_data1"])
+              console.log(data["new_data2"])
+              adddata(parseInt(data["new_data1"]), parseInt(data["new_data2"]));
               var newwidth = $('.chartAreaWrapper2').width() +60;
               $('.chartAreaWrapper2').width(newwidth);
-              $('.chartAreaWrapper').animate({scrollLeft:newwidth});
+              $('.chartAreaWrapper').animate({scrollLeft:newwidth}); 
+          }
+          else{
+              console.log("nothing");
           }
         },
         dataType: "json",
   });
       }, 500);
 
-   function adddata(new_data){
-    chart.data.labels.push("new data");
-    chart.data.datasets.forEach((dataset) => {
-        dataset.data.push(new_data);
-    });
-    //chart.update();
+   function adddata(new_data1, new_data2){
+      chart.data.labels.push("new data");
+      chart.data.datasets[0].data.push(new_data1);
+      chart.data.datasets[1].data.push(new_data2);
+   //chart.update();
    }
     
     </script>
@@ -126,7 +132,6 @@
         </div>
       </div>
 
-        <canvas id="myChartAxis" height="300" width="0"></canvas>
      </div>
  
 <script>
@@ -142,9 +147,9 @@ var ctx = document.getElementById("myChart").getContext("2d");
                         var sourceCanvas = myLiveChart.chart.canvas;
                         var copyWidth = myLiveChart.scales['y-axis-0'].width - 10;
                         var copyHeight = myLiveChart.scales['y-axis-0'].height + myLiveChart.scales['y-axis-0'].top + 10;
-                        var targetCtx = document.getElementById("myChartAxis").getContext("2d");
-                        targetCtx.canvas.width = copyWidth;
-                targetCtx.drawImage(sourceCanvas, 0, 0, copyWidth, copyHeight, 0, 0, copyWidth, copyHeight);
+                        //var targetCtx = document.getElementById("myChartAxis").getContext("2d");
+                        //targetCtx.canvas.width = copyWidth;
+                //targetCtx.drawImage(sourceCanvas, 0, 0, copyWidth, copyHeight, 0, 0, copyWidth, copyHeight);
                     }
                 }
       },
@@ -153,14 +158,26 @@ var ctx = document.getElementById("myChart").getContext("2d");
             labels: ["January", "February", "March", "April", "May", "June", "July"],
             datasets: [
                 {
-                    label: "My First dataset",
-                    fillColor: "#FF0000",
-                    strokeColor: "rgba(220,220,220,1)",
-                    pointColor: "rgba(220,220,220,1)",
-                    pointStrokeColor: "#fff",
-                    pointHighlightFill: "#fff",
-                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    label: "CH1",
+                    fillColor: "rgba(255, 0, 0, 0.6)",
+                    strokeColor: "#FF0000",
+                    borderColor: "#FF0000",
+                    pointColor: "#FF0000",
+                    pointStrokeColor: "#FFF",
+                    pointHighlightFill: "#FF0000",
+                    pointHighlightStroke: "#FF0000",
                     data: [65, 59, 80, 81, 56, 55, 40]
+                },
+                {
+                    label: "CH2",
+                    fillColor: "#FFFFFF",
+                    strokeColor: "#FF0000",
+                    borderColor: "#0000FF",
+                    pointColor: "#FF0000",
+                    pointStrokeColor: "#FFF",
+                    pointHighlightFill: "#FF0000",
+                    pointHighlightStroke: "#FF0000",
+                    data: [40, 55, 56, 81, 80, 59, 65]
                 }
             ]
         }};
@@ -171,7 +188,7 @@ var ctx = document.getElementById("myChart").getContext("2d");
 
 
 
-            <div id="menu2" class="tab-pane fade in active">
+            <div id="menu2" class="tab-pane fade ">
                 <h3>날짜별 그래프</h3>
                 <p>그래프2</p>
             </div>
